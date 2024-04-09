@@ -1,5 +1,6 @@
 const { EventEmitter } = require("events");
 const fetch = require("node-fetch");
+const { Headers } = require("node-fetch");
 const header = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
     "x-csrftoken": "a",
@@ -161,7 +162,7 @@ class User {
      * @returns {Promise<User>}
      */
     async login(username, password) {
-        const data = JSON.stringify({ "username": username, "password": password });
+        const data = JSON.stringify({ "username": username, "password": password })
         this.#headers = new Headers(header);
         this.#headers.append("Cookie", "scratchcsrftoken=a;scratchlanguage=en;");
         const res = await fetch("https://scratch.mit.edu/login/", {
