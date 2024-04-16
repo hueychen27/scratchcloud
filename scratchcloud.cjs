@@ -1,4 +1,4 @@
-const { UserError, CloudError } = require("./errors.cjs");
+const { SessionError, CloudError } = require("./errors.cjs");
 const { EventEmitter } = require("events");
 const fetch = require("node-fetch");
 const { Headers } = require("node-fetch");
@@ -13,7 +13,7 @@ const header = {
  * 
  * Note: All methods need authentication unless related to logging in or specified otherwise
  */
-class User {
+class Session {
     /**
       * User ID for Scratch account
      */
@@ -99,7 +99,7 @@ class User {
     constructor () { }
 
     /**
-     * Reset all properties of the User class.  
+     * Reset all properties of the Session class.  
      * This does not log out of Scratch for session so use `logout(false)` to reset variables and log out.
      */
     reset() {
@@ -165,7 +165,7 @@ class User {
      * @param {string} [sessionId=""] - Session ID (scratchcsrftoken cookie in scratch.mit.edu) to be used to login to Scratch (Default: "")
      * @param {string} [username=""] - Username to login to Scratch (Default: "")
      * @param {string} [csrftoken="a"] - CSRF token to use for headers in fetch requests (Default: "a")
-     * @returns {Promise<User>}
+     * @returns {Promise<Session>}
      */
     async sessionLogin(sessionId = "", username = "", csrftoken = "a") {
         this.sessionId = String(sessionId);
@@ -275,7 +275,7 @@ class User {
      * Easy way to login with username and password to Scratch. This return the User object.
      * @param {string} username Username to login to Scratch
      * @param {string} password Password to login to Scratch
-     * @returns {Promise<User>}
+     * @returns {Promise<Session>}
      */
     async login(username, password) {
         const data = JSON.stringify({ "username": username, "password": password })
@@ -291,7 +291,7 @@ class User {
             sessionId = String(res.headers.get("set-cookie").match(/scratchsessionsid=("[^"]+");/)[1]);
         } catch (e) {
             console.error(e);
-            throw new UserError("Could not connect to Scratch. Error: " + e)
+            throw new SessionError("Could not connect to Scratch. Error: " + e)
         }
         await this.sessionLogin(sessionId, username, this.csrfToken);
         await this.#waitUntilXtokenDone(10000);
@@ -465,5 +465,5 @@ class Cloud extends EventEmitter {
     }
     // TODO: Add cloud functionality here
 }
-module.exports.User = User;
+module.exports.Session = Session;
 module.exports.Cloud = Cloud;

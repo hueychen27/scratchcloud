@@ -1,9 +1,9 @@
 /**
  * Class for user errors
  */
-class UserError extends Error {
+class SessionError extends Error {
     constructor (message) {
-        super("User ERROR: " + message);
+        super("Session ERROR: " + message);
     }
 }
 
@@ -13,5 +13,5 @@ class CloudError extends Error {
     }
 }
 
-module.exports.UserError = UserError;
+module.exports.SessionError = SessionError;
 module.exports.CloudError = CloudError;
