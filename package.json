@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "cookie": "^0.6.0",
+    "cookie": "^0.7.0",
     "node-fetch": "^2.7.0"
   }
 }
